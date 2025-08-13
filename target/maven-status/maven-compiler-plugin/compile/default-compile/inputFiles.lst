@@ -11,4 +11,5 @@ D:\IntelliJ_Projects\video-streaming-api\src\main\java\com\example\videostreamin
 D:\IntelliJ_Projects\video-streaming-api\src\main\java\com\example\videostreaming\VideoStreamingApiApplication.java
 D:\IntelliJ_Projects\video-streaming-api\src\main\java\com\example\videostreaming\repository\EngagementRepository.java
 D:\IntelliJ_Projects\video-streaming-api\src\main\java\com\example\videostreaming\dto\EngagementResponseDTO.java
+D:\IntelliJ_Projects\video-streaming-api\src\main\java\com\example\videostreaming\exceptionHandling\GlobalExceptionHandler.java
 D:\IntelliJ_Projects\video-streaming-api\src\main\java\com\example\videostreaming\repository\VideoRepository.java

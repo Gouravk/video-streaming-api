@@ -12,12 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataIntegrityViolationException;
 
 @ExtendWith(MockitoExtension.class)
 class VideoServiceTest {
@@ -48,6 +47,28 @@ class VideoServiceTest {
         verify(videoRepository).save(captor.capture());
         assertThat(captor.getValue().getTitle()).isEqualTo("ABC");
         assertThat(saved.getDirector()).isEqualTo("Priyadarshini");
+    }
+
+    @Test
+    void publishVideo_ShouldThrowException_WhenRepositoryFails() {
+
+        VideoRequestDTO dto = new VideoRequestDTO("ABC", "Action-packed thriller",
+                "Priyadarshini", "Akshay Kumar,Govinda", 2000, "thriller", 120);
+
+        Video video = new Video();
+        video.setTitle("ABC");
+        video.setDirector("Priyadarshini");
+
+        when(videoMapper.dtoToEntity(dto)).thenReturn(video);
+        when(videoRepository.save(any(Video.class)))
+                .thenThrow(new DataIntegrityViolationException("Database error occurred"));
+
+        assertThatThrownBy(() -> videoService.publishVideo(dto))
+                .isInstanceOf(DataIntegrityViolationException.class)
+                .hasMessageContaining("Database error occurred");
+
+        verify(videoMapper).dtoToEntity(dto);
+        verify(videoRepository).save(any(Video.class));
     }
 }
 

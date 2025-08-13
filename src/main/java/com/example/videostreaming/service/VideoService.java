@@ -8,10 +8,13 @@ import com.example.videostreaming.entity.Video;
 import com.example.videostreaming.mapper.VideoMapper;
 import com.example.videostreaming.repository.EngagementRepository;
 import com.example.videostreaming.repository.VideoRepository;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class VideoService {
@@ -26,9 +29,15 @@ public class VideoService {
     }
 
     public Video publishVideo(VideoRequestDTO videoRequestDTO) {
-        Video video=videoMapper.dtoToEntity(videoRequestDTO);
-
-        return videoRepository.save(video);
+        if (videoRequestDTO == null) {
+            throw new IllegalArgumentException("VideoRequestDTO cannot be null");
+        }
+        try {
+            Video video = videoMapper.dtoToEntity(videoRequestDTO);
+            return videoRepository.save(video);
+        } catch (DataAccessException e) {
+            throw new DataIntegrityViolationException("Failed to save video: " + e.getMessage(), e);
+        }
     }
 
     public VideoResponseDTO createOrUpdateVideoMetadata(Long id,VideoRequestDTO videoRequestDTO) {
@@ -47,10 +56,13 @@ public class VideoService {
 
     public VideoResponseDTO loadVideo(Long id) {
         Video video = videoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Video not found"));
+                .orElseThrow(() -> new NoSuchElementException("Video not found with id: " + id));
 
+        if (video.isDeleted()) {
+            throw new IllegalStateException("Cannot load deleted video.");
+        }
         Engagement engagement = engagementRepository.findByVideoId(id)
-                .orElseThrow(() -> new RuntimeException("Engagement record not found"));
+                .orElseThrow(() -> new NoSuchElementException("Engagement Record not found with video id: " + id));
 
         engagement.incrementImpressions();
         engagementRepository.save(engagement);
@@ -60,10 +72,13 @@ public class VideoService {
 
     public String playVideo(Long id) {
         Video video = videoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Video not found"));
+                .orElseThrow(() -> new NoSuchElementException("Video not found with id: " + id));
 
+        if (video.isDeleted()) {
+            throw new IllegalStateException("Cannot play deleted video.");
+        }
         Engagement engagement = engagementRepository.findByVideoId(id)
-                .orElseThrow(() -> new RuntimeException("Engagement record not found"));
+                .orElseThrow(() -> new NoSuchElementException("Engagement Record not found with video id: " + id));
 
         engagement.incrementViews();
         engagementRepository.save(engagement);
@@ -100,7 +115,7 @@ public class VideoService {
     }
 
     public void deleteVideo(Long id) {
-        Video v = videoRepository.findById(id).orElse(null);
+        Video v = videoRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Video not found with id: " + id));
         if (v != null) {
             v.setDeleted(true);
             videoRepository.save(v);

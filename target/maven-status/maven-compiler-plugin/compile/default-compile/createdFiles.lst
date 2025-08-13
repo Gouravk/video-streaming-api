@@ -6,6 +6,7 @@ com\example\videostreaming\dto\VideoResponseDTO.class
 com\example\videostreaming\entity\Engagement.class
 com\example\videostreaming\dto\ApiResponse.class
 com\example\videostreaming\entity\Video.class
+com\example\videostreaming\exceptionHandling\GlobalExceptionHandler.class
 com\example\videostreaming\service\VideoService.class
 com\example\videostreaming\VideoStreamingApiApplication.class
 com\example\videostreaming\repository\EngagementRepository.class

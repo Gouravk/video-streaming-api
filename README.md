@@ -15,6 +15,8 @@ Domain Design Decisions
 6. Initial search is simple filter — can write some extensive queries rather than getting all entries.
 7. List/search APIs return only required subset of fields.
 8. Taking cast as main_cast in Video Entity, since cast is a keyword in SQL
+9. Considered a global exception handler class
+10. Unit tests written for positive-negative scenarios
 
 Technical Decisions
 - Java 17 + Spring Boot 2.7.x for stability & LTS.

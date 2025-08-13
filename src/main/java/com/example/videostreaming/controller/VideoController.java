@@ -7,6 +7,8 @@ import com.example.videostreaming.service.VideoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,7 +23,7 @@ public class VideoController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> publish(@RequestBody VideoRequestDTO videoRequestDTO) {
+    public ResponseEntity<ApiResponse> publish(@Valid @RequestBody VideoRequestDTO videoRequestDTO) {
         Video publishedVideo=videoService.publishVideo(videoRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse("Video Published Successfully",publishedVideo.getId()));
 
@@ -30,7 +32,7 @@ public class VideoController {
     @PutMapping("/{id}/metadata")
     public ResponseEntity<VideoResponseDTO> updateVideoMetadata(
             @PathVariable Long id,
-            @RequestBody VideoRequestDTO dto) {
+            @Valid @RequestBody VideoRequestDTO dto) {
         VideoResponseDTO updatedVideo = videoService.createOrUpdateVideoMetadata(id, dto);
         return ResponseEntity.ok(updatedVideo);
     }
