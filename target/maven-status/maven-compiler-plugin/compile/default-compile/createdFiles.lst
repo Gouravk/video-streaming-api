@@ -1,0 +1,14 @@
+com\example\videostreaming\dto\VideoRequestDTO.class
+com\example\videostreaming\dto\VideoSubsetDTO.class
+com\example\videostreaming\dto\EngagementResponseDTO.class
+com\example\videostreaming\controller\VideoController.class
+com\example\videostreaming\dto\VideoResponseDTO.class
+com\example\videostreaming\entity\Engagement.class
+com\example\videostreaming\dto\ApiResponse.class
+com\example\videostreaming\entity\Video.class
+com\example\videostreaming\service\VideoService.class
+com\example\videostreaming\VideoStreamingApiApplication.class
+com\example\videostreaming\repository\EngagementRepository.class
+com\example\videostreaming\service\EngagementService.class
+com\example\videostreaming\repository\VideoRepository.class
+com\example\videostreaming\mapper\VideoMapper.class
